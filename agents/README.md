@@ -1,6 +1,5 @@
 # alert-agents
 
-
 # alert_syslog.sh: Sample Pacemaker Syslog Alert Agent 
 
 ## Derived from alert_smtp.sh in the pacemaker package
@@ -20,8 +19,8 @@
  only wanted fencing notices and wanted it to be filtered at the 
  the alert generation stage rather than at the aggregator.
  
- In this example, I override the user-defined priority setting in
- cases where the services actually fail to start, in which case I 
+ In this example, we override the user-defined priority setting in
+ cases where the services actually fail to start, in which case we
  set the script to flag the notices as `crit`
  
 ## Sample configuration (cib fragment in xml notation)
@@ -153,3 +152,25 @@ optAlertKinds="fencing"
 Note that the provided agent does NOT exclude unhandled alerts; unhandled alerts that 
 are not of type fencing, node, resource, or attributes, WILL be generated and forwarded
 to your syslog server.
+
+# alert_syslog_debug.sh
+
+This script is simply a wrapper which is installed when debugging, purely to enable
+a debug log for development purposes to help you more rapidly customize the solution.
+Do not use this in production.
+
+Documentation TBD.
+
+# alert_smtp.sh
+
+This is an adaptation of the original alert_agent.smtp.sample in the pacemaker 
+package, extended to enable scoping of alert types similar to what the above alert_syslog.sh
+agent is doing. In the interest of fostering good practices, backtick-notation 
+subshell notation has been replaced with the more modern `$( )` notation as the 
+modern notation handles nested subshell invocations far more gracefully.
+
+# alert_smtp_debug.sh
+
+This script is simply a wrapper which is installed when debugging, purely to enable
+a debug log for development purposes to help you more rapidly customize the solution.
+Do not use this in production.
