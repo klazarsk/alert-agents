@@ -155,11 +155,43 @@ to your syslog server.
 
 # alert_syslog_debug.sh
 
+## About 
+
 This script is simply a wrapper which is installed when debugging, purely to enable
 a debug log for development purposes to help you more rapidly customize the solution.
-Do not use this in production.
 
-Documentation TBD.
+Do not use this in production because the log will grow rather quickly. The code listing is extremely simple:
+
+```
+#!/bin/bash
+
+bash -x /var/lib/pacemaker/alert_smtp_actual.sh 2>> /var/log/pacemaker/alert_smtp.debug
+```
+
+The reason we took this approach is that the production alert agent requires no modification to enable debug mode, which reduces the chance of introducing an error. The debug script uses bash to invoke the alert agent with the -x option which enables debug output, which is then redirected to a log file located in /var/log/pacemaker. 
+
+## Installation 
+
+_On each node:_
+
+### Place the debug script at the location where the production agent belongs 
+
+`scp alert_syslog_debug.sh host@node:/var/lib/pacemaker/alert_syslog.sh`
+
+### Place the alert agent in the usual directory, but alternate filename
+
+`scp alert_syslog.sh host@node:/var/lib/pacemaker/alert_syslog_actual.sh`
+
+### Set the ownership and permission on the files
+
+```
+chown hacluster:haclient /var/lib/pacemaker/alert_syslog{.sh,_actual.sh}
+chmod 0750 /var/lib/pacemaker/alert_syslog{.sh,_actual.sh}
+```
+
+### Set up the alert agent 
+
+_Follow the usual instructions; this debug wrapper can work dropped in place over an already-running alert_syslog.sh agent._
 
 # alert_smtp.sh
 
@@ -174,3 +206,44 @@ modern notation handles nested subshell invocations far more gracefully.
 This script is simply a wrapper which is installed when debugging, purely to enable
 a debug log for development purposes to help you more rapidly customize the solution.
 Do not use this in production.
+
+# alert_smtp_debug.sh
+
+## About 
+
+As with the syslog debug wrapper script, this script is simply a wrapper which is 
+installed when debugging, purely to enablea debug log for development purposes to 
+help you more rapidly customize the solution.
+
+Do not use this in production because the log will grow rather quickly. The code listing is extremely simple:
+
+```
+#!/bin/bash
+
+bash -x /var/lib/pacemaker/alert_smtp_actual.sh 2>> /var/log/pacemaker/alert_smtp.debug
+```
+
+The reason we took this approach is that the production alert agent requires no modification to enable debug mode, which reduces the chance of introducing an error. The debug script uses bash to invoke the alert agent with the -x option which enables debug output, which is then redirected to a log file located in /var/log/pacemaker. 
+
+## Installation 
+
+_On each node:_
+
+### Place the debug script at the location where the production agent belongs 
+
+`scp alert_smtp_debug.sh host@node:/var/lib/pacemaker/alert_smtp.sh`
+
+### Place the alert agent in the usual directory, but alternate filename
+
+`scp alert_smtp.sh host@node:/var/lib/pacemaker/alert_smtp_actual.sh`
+
+### Set the ownership and permission on the files
+
+```
+chown hacluster:haclient /var/lib/pacemaker/alert_smtp{.sh,_actual.sh}
+chmod 0750 /var/lib/pacemaker/alert_smtp{.sh,_actual.sh}
+```
+
+### Set up the alert agent 
+
+_Follow the usual instructions; this debug wrapper can work dropped in place over an already-running alert_smtp.sh agent._
