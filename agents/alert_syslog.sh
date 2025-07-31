@@ -93,7 +93,15 @@
 #  RHA_alert_server=fqdn.syslog.example.com
 
 #
-
+##############################################################################
+#
+# DEBUG
+# Uncomment these lines for debug trace logging
+#
+# set -xv
+# exec 2 > /var/log/pacemaker-alert_syslog-debug.log
+#
+##############################################################################
 
 if [ ! -z $RHA_alert_kinds ]; then
   optAlertKinds="${RHA_alert_kinds}"
@@ -181,3 +189,5 @@ if [ ! -z "${strSummary}" ]; then
   logger  ${optSyslogServer} ${optSyslogPort} -p ${RHA_syslog_facility}.${RHA_syslog_priority} ${optTag} "${RHA_syslog_tag}:(${RHA_syslog_facility}.${RHA_syslog_priority}) :: $( echo \" ${strNotice}\" | tr '\n' ' ')" 
   echo -e "strNotice value: \n {\n${strNotice}\n}" 1>&2
 fi
+
+exec 2>&-
