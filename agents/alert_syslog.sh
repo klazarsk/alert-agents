@@ -104,8 +104,8 @@ else
   # stage, otherwise if the variable is null/not set by alert 
   # options assignment, take the value in this stanza
   #_# Take alert types out of optAlertKinds to disable alerts
-  # optAlertKinds="fencing,node,resource,attribute"
-  optAlertKinds="fencing,node,resource,attribute"
+  # optAlertKinds="fencing,node,resource"
+  optAlertKinds="fencing,node,resource"
 
 fi
 
@@ -167,11 +167,6 @@ else
             strSummary="${CRM_alert_timestamp} ${cluster_name}: Resource operation '${CRM_alert_task}${CRM_alert_interval}' for '${CRM_alert_rsc}' on '${CRM_alert_node}': ${CRM_alert_desc}${CRM_alert_target_rc}"
           ;;
         esac
-      fi
-      ;;
-    attribute)
-      if [[ $optAlertKinds == *"attribute"* ]]; then
-        strSummary="${CRM_alert_timestamp} ${cluster_name}: The '${CRM_alert_attribute_name}' attribute of the '${CRM_alert_node}' node was updated in '${CRM_alert_attribute_value}'"
       fi
       ;;
     *)

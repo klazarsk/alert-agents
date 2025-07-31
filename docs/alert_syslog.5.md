@@ -1,4 +1,4 @@
-alert_syslog.sh 5 "July 2025" alert_syslog.sh "User Manual"
+ alert_syslog.sh 5 "July 2025" alert_syslog.sh "User Manual"
 ==================================================
 
 # NAME
@@ -77,7 +77,7 @@ local2.*    /var/log/pacemaker/syslog # Capture ALL notices sent to LOG_LOCAL2
 local2.err  /var/log/pacemaker/errorlog # capture all notices of ERR or 
  greater priority to /var/log/paceemaker/errorlog
    
-**RHA_alert_kind=**_"fencing,node,resource,attribute"_
+**RHA_alert_kind=**_"fencing,node,resource"_
 
 This option sets the RHA_alert_kind variable in the alert_smtp_filtered alert
  agent, to specify the criteria on which alerts to allow to send to the email
@@ -101,10 +101,6 @@ _resource_
 These alerts are generated when a resource is started, stopped, or fails to
  start. 
 
-_attriubute_
-
-These alerts are generated when a resource's attribute is changed. 
-         
 # INSTALLATION
 
 Place alert_syslog.sh in pacemaker lib dirctory (typically /var/lib/pacemaker/)
@@ -139,14 +135,14 @@ Example which sends only fencing and unhandled alerts:
  RHA_alert_kind="fencing"
 ```
 
-This example will send alerts of kind node, resource, attribute, and "unhandled"
+This example will send alerts of kind node, resource, and "unhandled"
  alerts, but not fencing notifications:
  
 ```
 ~] # pcs alert create id=alert_webcluster1 path=/var/lib/pacemaker/alert_syslog.sh
  options RHA_syslog_facility=local2 RHA_syslog_priority=err \
  RHA_syslog_tag=webcluster1 RHA_alert_server=fqdn.syslog.example.com \
- RHA_alert_kind="node,resource,attribute"
+ RHA_alert_kind="node,resource"
 ```
 
 

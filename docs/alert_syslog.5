@@ -96,7 +96,7 @@ local2.err  /var/log/pacemaker/errorlog # capture all notices of ERR or
  greater priority to /var/log/paceemaker/errorlog
 
 .PP
-\fBRHA_alert_kind=\fP\fI"fencing,node,resource,attribute"\fP
+\fBRHA_alert_kind=\fP\fI"fencing,node,resource"\fP
 
 .PP
 This option sets the RHA_alert_kind variable in the alert_smtp_filtered alert
@@ -127,12 +127,6 @@ These alerts when a node is suspended, unsuspended, rebooted, joins the
 .PP
 These alerts are generated when a resource is started, stopped, or fails to
  start.
-
-.PP
-\fIattriubute\fP
-
-.PP
-These alerts are generated when a resource's attribute is changed.
 
 
 .SH INSTALLATION
@@ -171,14 +165,14 @@ Example which sends only fencing and unhandled alerts:
 .EE
 
 .PP
-This example will send alerts of kind node, resource, attribute, and "unhandled"
+This example will send alerts of kind node, resource, and "unhandled"
  alerts, but not fencing notifications:
 
 .EX
 ~] # pcs alert create id=alert_webcluster1 path=/var/lib/pacemaker/alert_syslog.sh
  options RHA_syslog_facility=local2 RHA_syslog_priority=err \\
  RHA_syslog_tag=webcluster1 RHA_alert_server=fqdn.syslog.example.com \\
- RHA_alert_kind="node,resource,attribute"
+ RHA_alert_kind="node,resource"
 .EE
 
 

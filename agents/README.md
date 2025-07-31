@@ -145,12 +145,12 @@ line of the alert agent script. For example, this limits any alerts by this agen
 strictly to fencing alerts:
 
 ```
-# optAlertKinds="fencing,node,resource,attribute"
+# optAlertKinds="fencing,node,resource"
 optAlertKinds="fencing"
 ```
 
 Note that the provided agent does NOT exclude unhandled alerts; unhandled alerts that 
-are not of type fencing, node, resource, or attributes, WILL be generated and forwarded
+are not of type fencing, node, or resource, WILL be generated and forwarded
 to your syslog server.
 
 # alert_syslog_debug.sh

@@ -35,7 +35,7 @@ This is the path to the alert agent on the nodes' filesystems - the path should
 
 This is what the agent will use as the "FROM" field on email alerts
 
-**RHA_alert_kind=**_"fencing,node,resource,attribute"_
+**RHA_alert_kind=**_"fencing,node,resource"_
 
 This option sets the RHA_alert_kind variable in the alert_smtp_filtered alert 
  agent, to specify the criteria on which alerts to allow to send to the email 
@@ -59,10 +59,6 @@ _resource_
 These alerts are generated when a resource is started, stopped, or fails to 
  start. 
     
-_attribute_
-
-These alerts are generated when a resource's attribute is changed. 
-
 # INSTALLATION
 
 Place alert_syslog.sh in pacemaker lib dirctory (typically /var/lib/pacemaker)
@@ -81,7 +77,7 @@ Proceed to EXAMPLES section for alert configuration
 # EXAMPLES
 
 The following example will send alert emails whenever a node is fenced and also 
- unhandled alerts, but not node, resource, or attribute alerts, and send the 
+ unhandled alerts, but not node or resource alerts, and send the 
  alert emails to sysad@example.com
 
 ```
@@ -93,14 +89,14 @@ The following example will send alert emails whenever a node is fenced and also
 [root@nodea ~]# 
 ```
 
-This example will send alerts of kind node, resource, attribute, and "unhandled"
+This example will send alerts of kind node, resource, and "unhandled"
  alerts, but not fencing notifications, and the alert emails will go to 
  monitor@example.com:
 
 ```
 [root@nodea ~]# pcs alert create id=filtered-smtp \
 path=/var/lib/pacemaker/alert_smtp_filtered.sh options \
-email_sender=noreply@example.com RHA_alert_kind="node,resource,attribute"
+email_sender=noreply@example.com RHA_alert_kind="node,resource"
 [root@nodea ~]# pcs alert recipient add filtered-smtp \
 value=monitor@example.com  
 [root@nodea ~]# 

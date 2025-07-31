@@ -56,7 +56,7 @@
   if [ -z ${RHA_alert_kinds} ]; then
   
     # ALL alerts (unfiltered)
-    optAlertKinds="fencing,node,resource,attribute"
+    optAlertKinds="fencing,node,resource"
     # ONLY fencing alerts:
     # optAlertKinds="fencing"
   
@@ -125,11 +125,6 @@ else
         esac
       fi
       ;;
-    attribute)
-        if [[ $optAlertKinds == *"attribute"* ]]; then 
-          email_subject="${CRM_alert_timestamp} ${cluster_name}: The '${CRM_alert_attribute_name}' attribute of the '${CRM_alert_node}' node was updated in '${CRM_alert_attribute_value}'"
-        fi
-        ;;
     *)
         email_subject="${CRM_alert_timestamp} ${cluster_name}: Unhandled $CRM_alert_kind alert"
         ;;
