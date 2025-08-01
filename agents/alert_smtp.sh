@@ -78,7 +78,48 @@
   fi 
 #
 #############################################################
+if tty -s ; then
+    echo -e "\033[1mYour command line: \033[0m\n";
+    echo -e "\t $cmdLine\n\n";
+    echo -e "\033[1mNAME\033[0m\n"
+    echo -e "\t alert_smtp_filtered.sh - Sample SMTP alert agent for pacemaker with filtering\n\n"
+    echo -e "\033[1mSYNOPSIS\033[0m\n\n"
+    echo -e "\tpcs alert create id=filtered-smtp \"
+    echo -e "\t path=/var/lib/pacemaker/**alert_smtp_filtered.sh** options \"
+    echo -e "\t**email_sender=**noreply@example.com **RHA_alert_kind=**\"fencing\" \n\n"
+    echo -e "\t\033[1mDESCRIPTION\033[0m\n"
+    echo -e "\t**alert_smtp_filtered.sh** is a sample alert agent which implements filtering by"
+    echo -e "\t matching the value of pacemaker's CRM_alert_kind variable that is set when an "
+    echo -e "\t alert is generated. This agent was built for a client who wished to send "
+    echo -e "\t receive alerts whenever resources are relocated.\n"
+    echo -e "\tBy default, the email client the script expects is sendmail."
+    echo -e "\033[1mOPTIONS\033[0m\n\n"
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
+    echo -e " "
 
+
+exit 1 
+fi
 
 email_client_default="sendmail"
 email_sender_default="hacluster"
