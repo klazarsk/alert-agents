@@ -1,20 +1,20 @@
-alert_smtp_filtered.sh 5 "July 2025" alert_smtp_filtered.sh "User Manual"
+alert_smtp.sh 5 "July 2025" alert_smtp.sh "User Manual"
 ==================================================
 
 # NAME
 
-alert_smtp_filtered.sh - Sample SMTP alert agent for pacemaker with filtering
+alert_smtp.sh - Sample SMTP alert agent for pacemaker with filtering
 
 # SYNOPSIS
 
 pcs alert create id=filtered-smtp \
- path=/var/lib/pacemaker/**alert_smtp_filtered.sh** options \
+ path=/var/lib/pacemaker/**alert_smtp.sh** options \
  **email_sender=**noreply@example.com **RHA_alert_kind=**"fencing"
 
 
 # DESCRIPTION
 
-**alert_smtp_filtered.sh** is a sample alert agent which implements filtering by
+**alert_smtp.sh** is a sample alert agent which implements filtering by
  matching the value of pacemaker's CRM_alert_kind variable that is set when an 
  alert is generated. This agent was built for a client who wished to send 
  receive alerts whenever resources are relocated,.
@@ -23,7 +23,7 @@ By default, the email client the script expects is sendmail.
 
 # OPTIONS
 
-**path=**_/var/lib/pacemaker/alert_smtp_filtered.sh_
+**path=**_/var/lib/pacemaker/alert_smtp.sh_
 
 This is the path to the alert agent on the nodes' filesystems - the path should
  match to wherever you've installed the file. By default they're placed in 
@@ -37,7 +37,7 @@ This is what the agent will use as the "FROM" field on email alerts
 
 **RHA_alert_kind=**_"fencing,node,resource"_
 
-This option sets the RHA_alert_kind variable in the alert_smtp_filtered alert 
+This option sets the RHA_alert_kind variable in the alert_smtp.sh alert 
  agent, to specify the criteria on which alerts to allow to send to the email 
  recipient.
 
@@ -66,10 +66,10 @@ Place alert_syslog.sh in pacemaker lib dirctory (typically /var/lib/pacemaker)
  default install); chmod it 0750
 
 ```
-[root@nodea ~]# cp /usr/share/pacemaker/alerts/alert_smtp_filtered.sh.sample \
-  /var/lib/pacemaker/alert_smtp_filtered.sh
-[root@nodea ~]# chown hacluster:haclient /var/lib/pacemaker/alert_smtp_filtered.sh
-[root@nodea ~]# chmod 0750 /var/lib/pacemaker/alert_smtp_filtered.sh
+[root@nodea ~]# cp /usr/share/pacemaker/alerts/alert_smtp.sh.sample \
+  /var/lib/pacemaker/alert_smtp.sh
+[root@nodea ~]# chown hacluster:haclient /var/lib/pacemaker/alert_smtp.sh
+[root@nodea ~]# chmod 0750 /var/lib/pacemaker/alert_smtp.sh
 ```
 
 Proceed to EXAMPLES section for alert configuration
@@ -82,7 +82,7 @@ The following example will send alert emails whenever a node is fenced and also
 
 ```
 [root@nodea ~]# pcs alert create id=filtered-smtp \
- path=/var/lib/pacemaker/alert_smtp_filtered.sh options \
+ path=/var/lib/pacemaker/alert_smtp.sh options \
  email_sender=noreply@example.com RHA_alert_kind="fencing"
 [root@nodea ~]# pcs alert recipient add filtered-smtp \
  value=sysad@example.com@example.com  
@@ -95,7 +95,7 @@ This example will send alerts of kind node, resource, and "unhandled"
 
 ```
 [root@nodea ~]# pcs alert create id=filtered-smtp \
-path=/var/lib/pacemaker/alert_smtp_filtered.sh options \
+path=/var/lib/pacemaker/alert_smtp.sh options \
 email_sender=noreply@example.com RHA_alert_kind="node,resource"
 [root@nodea ~]# pcs alert recipient add filtered-smtp \
 value=monitor@example.com  

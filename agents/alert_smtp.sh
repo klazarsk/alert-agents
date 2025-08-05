@@ -78,46 +78,63 @@
   fi 
 #
 #############################################################
-if tty -s ; then
-    echo -e "\033[1mYour command line: \033[0m\n";
-    echo -e "\t $cmdLine\n\n";
-    echo -e "\033[1mNAME\033[0m\n"
-    echo -e "\t alert_smtp_filtered.sh - Sample SMTP alert agent for pacemaker with filtering\n\n"
-    echo -e "\033[1mSYNOPSIS\033[0m\n\n"
-    echo -e "\tpcs alert create id=filtered-smtp \"
-    echo -e "\t path=/var/lib/pacemaker/**alert_smtp_filtered.sh** options \"
-    echo -e "\t**email_sender=**noreply@example.com **RHA_alert_kind=**\"fencing\" \n\n"
-    echo -e "\t\033[1mDESCRIPTION\033[0m\n"
-    echo -e "\t**alert_smtp_filtered.sh** is a sample alert agent which implements filtering by"
+if tty -s ;
+then
+
+otagBold="\033[1m";
+ctag="\033[0m";
+otagRed='\033[0;31m'
+otagRevRed='\e[0;101m'
+otagUline="\e[4m"
+    echo -e "${otagBuld}Your command line:${ctag}\n";
+    echo -e "\t $0 $@ \n";
+    echo -e "\t\033[0;31mThis alert agent is intended to be called from pacemaker, not from"
+    echo -e "\tan interactive shell.${ctag}\n"
+
+    echo -e "${otagBold}NAME${ctag}\n"
+    echo -e "\talert_smtp.sh - Sample SMTP alert agent for pacemaker with filtering\n\n"
+
+    echo -e "${otagBold}SYNOPSIS${ctag}\n"
+    echo -e "\t~] $ pcs alert create id=filtered-smtp \ "
+    echo -e "\t${otagBold}path=${ctag}/var/lib/pacemaker/alert_smtp.sh options \ "
+    echo -e "\t${otagBold}email_sender=${ctag}noreply@example.com ${otagBold}RHA_alert_kind=${ctag}\"fencing\" \n"
+
+    echo -e "${otagBold}DESCRIPTION${ctag}\n"
+    echo -e "\t${otagBold}alert_smtp.sh${ctag} is a sample alert agent which implements filtering by"
     echo -e "\t matching the value of pacemaker's CRM_alert_kind variable that is set when an "
     echo -e "\t alert is generated. This agent was built for a client who wished to send "
     echo -e "\t receive alerts whenever resources are relocated.\n"
-    echo -e "\tBy default, the email client the script expects is sendmail."
-    echo -e "\033[1mOPTIONS\033[0m\n\n"
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
-    echo -e " "
+    echo -e "\tBy default, the email client the script expects is sendmail.\n"
 
+    echo -e "${otagBold}OPTIONS${ctag}\n"
+    echo -e "\t${otagBold}path=${ctag}_/var/lib/pacemaker/alert_smtp.sh"
+    echo -e "\tThis is the path to the alert agent on the nodes' filesystems - the path should"
+    echo -e "\tmatch to wherever you've installed the file. By default they're placed in"
+    echo -e "\t/usr/share/pacemaker/alerts/ when installing from rpm, and they're usually"
+    echo -e "\tmanually placed in /var/lib/pacemaker/ for runtime when the agents are"
+    echo -e "\tconfigured.\n"
+    echo -e "\t${otagBold}email_sender=${ctag}user@example.com"
+    echo -e "\tThis is what the agent will use as the "FROM" field on email alerts\n"
+    echo -e "\t${otagBold}RHA_alert_kind=${ctag}fencing,node,resource\n"
+    echo -e "\tThis option sets the RHA_alert_kind variable in the alert_smtp.sh alert"
+    echo -e "\tagent, to specify the criteria on which alerts to allow to send to the email"
+    echo -e "\trecipient.\n"
+    echo -e "\tNote that otherwise-unspecified alert types will be sent to the recipient"
+    echo -e "\tregardless of the filter specification.\n"
+    echo -e "\t${otagUline}fencing${ctag}"
+    echo -e "\tThese alerts are generated when a node is fenced, whether automatically or"
+    echo -e "\tautomatically.\n"
+    echo -e "\t${otagUline}node${ctag}"
+    echo -e "\tThese alerts when a node is suspended, unsuspended, rebooted, joins the"
+    echo -e "\tcluster, etc.\n"
+    echo -e "\t${otagUline}resource${ctag}"
+    echo -e "\tThese alerts are generated when a resource is started, stopped, or fails to"
+    echo -e "\tstart.\n"
 
+    echo -e "${otagBold}INSTALLATION${ctag}\n"
+    echo -e "\tPlace alert_syslog.sh in pacemaker lib dirctory (typically /var/lib/pacemaker)"
+    echo -e "\tchown it the pacemaker user and group (typically hacluster:haclient on a"
+    echo -e "\tdefault install); chmod it 0750. If installed via RPM, this will be done for you.\n"
 exit 1 
 fi
 
