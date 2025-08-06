@@ -76,8 +76,8 @@ Proceed to EXAMPLES section for alert configuration
 
 # EXAMPLES
 
-The following example will send alert emails whenever a node is fenced and also 
- unhandled alerts, but not node or resource alerts, and send the 
+The following example will send alert emails whenever a node is fenced and  
+ unhandled alerts, but not node or resource alerts. The agent will send the 
  alert emails to sysad@example.com
 
 ```
