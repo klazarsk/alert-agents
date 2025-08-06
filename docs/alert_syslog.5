@@ -169,7 +169,7 @@ This example will send alerts of kind node, resource, and "unhandled"
  alerts, but not fencing notifications:
 
 .EX
-~] # pcs alert create id=alert_webcluster1 path=/var/lib/pacemaker/alert_syslog.sh
+~] # pcs alert create id=alert_webcluster1 path=/var/lib/pacemaker/alert_syslog.sh \\
  options RHA_syslog_facility=local2 RHA_syslog_priority=err \\
  RHA_syslog_tag=webcluster1 RHA_alert_server=fqdn.syslog.example.com \\
  RHA_alert_kind="node,resource"
