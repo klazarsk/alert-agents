@@ -7,7 +7,7 @@ alert_syslog.sh \- Sample Syslog alert agent for pacemaker with filtering
 
 .SH SYNOPSIS
 pcs alert create id=alert_cluster  \\
- path=\fB/var/lib/pacemaker/alert_syslog_filtered.sh\fP  options \\
+ path=\fB/var/lib/pacemaker/alert_syslog.sh\fP  options \\
  \fBRHA_syslog_facility\fP=local2 \fBRHA_syslog_priority\fP=err \\
  \fBRHA_syslog_tag\fP=SERVICEGROUP \fBRHA_alert_server\fP=syslog.example.com
 
@@ -57,6 +57,22 @@ Syslog \fIpriority\fP examples:
  LOG_EMERG, LOG_ALERT, LOG_CRIT, ERR, WARNING, NOTICE, INFO, DEBUG
 
 .PP
+(there are more facilities and levels than included above)
+
+.PP
+If you've worked with syslog.conf files before you'll recall it's normal for
+ the facility to be specified in all lower case, and the LOG_ prefix to be
+ dropped. So these examples would be typical:
+
+.PP
+local2.*    /var/log/pacemaker/syslog # Capture ALL notices sent to LOG_LOCAL2
+ to /var/log/pacemaker/syslog
+
+.PP
+local2.err  /var/log/pacemaker/errorlog # capture all notices of ERR or
+ greater priority to /var/log/paceemaker/errorlog
+
+.PP
 \fBRHA_syslog_tag=\fP\fItag\fP
 
 .PP
@@ -80,31 +96,15 @@ This is the port the syslog aggregator is listening on if it's anything other
 This is the protocol syslog is listening for; valid values are \fItcp\fP or \fIudp\fP
 
 .PP
-(there are more facilities and levels than included above)
-
-.PP
-If you've worked with syslog.conf files before you'll recall it's normal for
- the facility to be specified in all lower case, and the LOG_ prefix to be
- dropped. So these examples would be typical:
-
-.PP
-local2.*    /var/log/pacemaker/syslog # Capture ALL notices sent to LOG_LOCAL2
- to /var/log/pacemaker/syslog
-
-.PP
-local2.err  /var/log/pacemaker/errorlog # capture all notices of ERR or
- greater priority to /var/log/paceemaker/errorlog
-
-.PP
 \fBRHA_alert_kind=\fP\fI"fencing,node,resource"\fP
 
 .PP
-This option sets the RHA_alert_kind variable in the alert_smtp_filtered alert
+This option sets the RHA_alert_kind variable in the alert_syslog alert
  agent, to specify the criteria on which alerts to allow to send to the email
  recipient.
 
 .PP
-Note that otherwise-unspecified alert types will be sent to the recipient \\
+Note that otherwise-unspecified alert types will be sent to the recipient
  regardless of the filter specification.
 
 .PP

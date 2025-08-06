@@ -8,7 +8,7 @@
 # SYNOPSIS
 
  pcs alert create id=alert_cluster  \
- path=**/var/lib/pacemaker/alert_syslog_filtered.sh**  options \
+ path=**/var/lib/pacemaker/alert_syslog.sh**  options \
  **RHA_syslog_facility**=local2 **RHA_syslog_priority**=err \
  **RHA_syslog_tag**=SERVICEGROUP **RHA_alert_server**=syslog.example.com
 
@@ -48,6 +48,18 @@ This is in relation to the syslog priority level (man 3 syslog)
  Syslog _priority_ examples:
  LOG_EMERG, LOG_ALERT, LOG_CRIT, ERR, WARNING, NOTICE, INFO, DEBUG
 
+(there are more facilities and levels than included above)
+   
+If you've worked with syslog.conf files before you'll recall it's normal for 
+ the facility to be specified in all lower case, and the LOG_ prefix to be 
+ dropped. So these examples would be typical:
+
+local2.*    /var/log/pacemaker/syslog # Capture ALL notices sent to LOG_LOCAL2
+ to /var/log/pacemaker/syslog
+
+local2.err  /var/log/pacemaker/errorlog # capture all notices of ERR or 
+ greater priority to /var/log/paceemaker/errorlog
+   
 **RHA_syslog_tag=**_tag_
 
 This is in relation to the syslog _tag_ level (_man 5 rsyslog.conf, man 1 logger_)
@@ -65,25 +77,13 @@ This is the port the syslog aggregator is listening on if it's anything other
 
 This is the protocol syslog is listening for; valid values are _tcp_ or _udp_ 
          
-(there are more facilities and levels than included above)
-   
-If you've worked with syslog.conf files before you'll recall it's normal for 
- the facility to be specified in all lower case, and the LOG_ prefix to be 
- dropped. So these examples would be typical:
-
-local2.*    /var/log/pacemaker/syslog # Capture ALL notices sent to LOG_LOCAL2
- to /var/log/pacemaker/syslog
-
-local2.err  /var/log/pacemaker/errorlog # capture all notices of ERR or 
- greater priority to /var/log/paceemaker/errorlog
-   
 **RHA_alert_kind=**_"fencing,node,resource"_
 
-This option sets the RHA_alert_kind variable in the alert_smtp_filtered alert
+This option sets the RHA_alert_kind variable in the alert_syslog alert
  agent, to specify the criteria on which alerts to allow to send to the email
  recipient.
 
-Note that otherwise-unspecified alert types will be sent to the recipient \
+Note that otherwise-unspecified alert types will be sent to the recipient 
  regardless of the filter specification.
 
 _fencing_

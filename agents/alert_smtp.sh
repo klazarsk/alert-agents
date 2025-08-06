@@ -1,15 +1,5 @@
 #!/bin/sh
 #
-# Adapted from alert_smtp.sh from the pacemaker package by 
-# klazarsk@redhat.com for scopable alert generation
-#
-# You can improve upon the granularity of the alerting by matching 
-# substrings in variables such as CRM_alert_desc and testing other
-# variables and creating more complex cases to drive filtering and turning 
-# individual alerts off and on. In this user's case, they only wanted 
-# fencing notices and wanted it filtered at the the alert generation stage.
-# 
-#
 #############################################################
 #
 # Copyright 2016-2021 the Pacemaker project contributors
@@ -86,6 +76,7 @@ ctag="\033[0m";
 otagRed='\033[0;31m'
 otagRevRed='\e[0;101m'
 otagUline="\e[4m"
+otagItal="\e[3m"
     echo -e "${otagBuld}Your command line:${ctag}\n";
     echo -e "\t $0 $@ \n";
     echo -e "\t\033[0;31mThis alert agent is intended to be called from pacemaker, not from"
@@ -107,20 +98,22 @@ otagUline="\e[4m"
     echo -e "\tBy default, the email client the script expects is sendmail.\n"
 
     echo -e "${otagBold}OPTIONS${ctag}\n"
-    echo -e "\t${otagBold}path=${ctag}_/var/lib/pacemaker/alert_smtp.sh"
+    echo -e "\t${otagBold}path=${ctag}_/var/lib/pacemaker/${otagBold}alert_smtp.sh${ctag}"
     echo -e "\tThis is the path to the alert agent on the nodes' filesystems - the path should"
     echo -e "\tmatch to wherever you've installed the file. By default they're placed in"
     echo -e "\t/usr/share/pacemaker/alerts/ when installing from rpm, and they're usually"
-    echo -e "\tmanually placed in /var/lib/pacemaker/ for runtime when the agents are"
+    echo -e "\tmanually placed in /var/lib/pacemaker/ for runtime when the agents areE"
     echo -e "\tconfigured.\n"
     echo -e "\t${otagBold}email_sender=${ctag}user@example.com"
-    echo -e "\tThis is what the agent will use as the "FROM" field on email alerts\n"
-    echo -e "\t${otagBold}RHA_alert_kind=${ctag}fencing,node,resource\n"
+    echo -e "\tThis is what the agent will use as the ${otagItal}FROM${ctag} field on email alerts\n"
+
+    echo -e "\t${otagBold}RHA_alert_kind=${ctag}\"${otagItal}fencing,node,resource${ctag}\""
     echo -e "\tThis option sets the RHA_alert_kind variable in the alert_smtp.sh alert"
     echo -e "\tagent, to specify the criteria on which alerts to allow to send to the email"
     echo -e "\trecipient.\n"
     echo -e "\tNote that otherwise-unspecified alert types will be sent to the recipient"
     echo -e "\tregardless of the filter specification.\n"
+
     echo -e "\t${otagUline}fencing${ctag}"
     echo -e "\tThese alerts are generated when a node is fenced, whether automatically or"
     echo -e "\tautomatically.\n"
@@ -129,12 +122,38 @@ otagUline="\e[4m"
     echo -e "\tcluster, etc.\n"
     echo -e "\t${otagUline}resource${ctag}"
     echo -e "\tThese alerts are generated when a resource is started, stopped, or fails to"
-    echo -e "\tstart.\n"
+    echo -e "\tstart. \n"
 
-    echo -e "${otagBold}INSTALLATION${ctag}\n"
-    echo -e "\tPlace alert_syslog.sh in pacemaker lib dirctory (typically /var/lib/pacemaker)"
-    echo -e "\tchown it the pacemaker user and group (typically hacluster:haclient on a"
-    echo -e "\tdefault install); chmod it 0750. If installed via RPM, this will be done for you.\n"
+    echo -e "\t${otagBold}INSTALLATION${ctag}\n"
+    echo -e "\tPlace alert_syslog.sh in pacemaker lib dirctory (typically /var/lib/pacemaker "
+    echo -e "\tchown it the pacemaker user and group (typically hacluster:haclient on a "
+    echo -e "\tdefault install); chmod it 0750 \n"
+
+    echo -e "\t\t~]# cp /usr/share/pacemaker/alerts/${otagBold}alert_smtp.sh.sample${ctag} \ "
+    echo -e "\t\t  /var/lib/pacemaker/${otagBold}alert_smtp.sh${ctag} "
+    echo -e "\t\t~]# chown hacluster:haclient /var/lib/pacemaker/${otagBold}alert_smtp.sh${ctag} "
+    echo -e "\t\t~]# chmod 0750 /var/lib/pacemaker/${otagBold}alert_smtp.sh${ctag} \n"
+    echo -e "\t\tProceed to EXAMPLES section for alert configuration\n"
+
+    echo -e "${otagBold}EXAMPLES${ctag} \n"
+    echo -e "\tThe following example will send alert emails whenever a node is fenced and "
+    echo -e "\tunhandled alerts, but not node or resource alerts. The agent will send the"
+    echo -e "\talert emails to sysad@example.com\n"
+
+    echo -e "\t\t~]# pcs alert create id=filtered-smtp \ "
+    echo -e "\t\t  ${otagBold}path=${ctag}/var/lib/pacemaker/${otagBold}alert_smtp.sh${ctag} options \ "
+    echo -e "\t\t  ${otagBold}email_sender=${ctag}noreply@example.com ${otagBold}RHA_alert_kind=${ctag}\"${otagItal}fencing${ctag}\" \n"
+
+    echo -e "\tThis example will send alerts of kind node, resource, and "unhandled" "
+    echo -e "\talerts, but not fencing notifications, and the alert emails will go to  "
+    echo -e "\tmonitor@example.com \n"
+
+    echo -e "\t\t~]# pcs alert create id=filtered-smtp \ "
+    echo -e "\t\t  path=/var/lib/pacemaker/${otagBold}alert_smtp.sh${ctag} options \ "
+    echo -e "\t\t  ${otagBold}email_sender${ctag}=noreply@example.com ${otagBold}RHA_alert_kind=${ctag}\"${otagItal}node,resource${ctag}\" "
+    echo -e "\t\t~]# pcs alert recipient add filtered-smtp \ "
+    echo -e "\t\t value=monitor@example.com \n"
+
 exit 1 
 fi
 
