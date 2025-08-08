@@ -6,10 +6,10 @@ alert_syslog.sh \- Sample Syslog alert agent for pacemaker with filtering
 
 
 .SH SYNOPSIS
-pcs alert create id=alert_cluster  \\
- path=\fB/var/lib/pacemaker/alert_syslog.sh\fP  options \\
- \fBRHA_syslog_facility\fP=local2 \fBRHA_syslog_priority\fP=err \\
- \fBRHA_syslog_tag\fP=SERVICEGROUP \fBRHA_alert_server\fP=syslog.example.com
+\fBpcs alert create id=alert_cluster\fP  \\
+ path=\fB/var/lib/pacemaker/alert_syslog.sh\fP  \fBoptions\fP \\
+ [\fBRHA_syslog_facility=\fP\fIlocal2\fP] [\fBRHA_syslog_priority=\fP\fIerr\fP] \\
+ [\fBRHA_syslog_tag=\fP\fISERVICEGROUP\fP] [\fBRHA_alert_server=\fP\fIsyslog.example.com\fP]
 
 
 .SH DESCRIPTION
@@ -23,7 +23,7 @@ Filtering, syslog target, facility, priority, and syslog tag are all driven by
 
 
 .SH OPTIONS
-\fBpath=\fP_/var/lib/pacemaker/alert\fIsyslog.sh\fP
+\fBpath=\fP\fI/var/lib/pacemaker/alert_syslog.sh\fP
 
 .PP
 This is the path to the alert agent on the nodes' filesystems - the path
@@ -39,7 +39,7 @@ This is the path to the alert agent on the nodes' filesystems - the path
 This is in relation to the the syslog alert facility (man 3 syslog)
 
 .PP
-Syslog \fIfacility\fP Examples:
+Syslog facility Examples:
 
 .PP
 LOG_AUTH, AUTHPRIV, LOG_LOCAL0, local5, etc.
@@ -47,13 +47,13 @@ LOG_AUTH, AUTHPRIV, LOG_LOCAL0, local5, etc.
   this script
 
 .PP
-\fBRHA_syslog_priority=\fP_RHA_syslog\fIpriority\fP
+\fBRHA_syslog_priority=\fP\fIRHA_syslog_priority\fP
 
 .PP
 This is in relation to the syslog priority level (man 3 syslog)
 
 .PP
-Syslog \fIpriority\fP examples:
+Syslog priority examples:
  LOG_EMERG, LOG_ALERT, LOG_CRIT, ERR, WARNING, NOTICE, INFO, DEBUG
 
 .PP
@@ -76,7 +76,7 @@ local2.err  /var/log/pacemaker/errorlog # capture all notices of ERR or
 \fBRHA_syslog_tag=\fP\fItag\fP
 
 .PP
-This is in relation to the syslog \fItag\fP level (\fIman 5 rsyslog.conf, man 1 logger\fP)
+This is in relation to the syslog tag level (man 5 rsyslog.conf, man 1 logger)
 
 .PP
 This is the syslog "tag" attribute which is supported by many aggreggators,
@@ -87,7 +87,7 @@ This is the syslog "tag" attribute which is supported by many aggreggators,
 
 .PP
 This is the port the syslog aggregator is listening on if it's anything other
- than the standard syslog port of \fI514\fP
+ than the standard syslog port of 514
 
 .PP
 \fBRHA_syslog_proto=\fP\fIprotocol\fP
@@ -99,7 +99,7 @@ This is the protocol syslog is listening for; valid values are \fItcp\fP or \fIu
 \fBRHA_alert_kind=\fP\fI"fencing,node,resource"\fP
 
 .PP
-This option sets the RHA_alert_kind variable in the alert_syslog alert
+This option sets the RHA_alert_kind variable in the alert_syslog.sh alert
  agent, to specify the criteria on which alerts to allow to send to the email
  recipient.
 
@@ -108,21 +108,21 @@ Note that otherwise-unspecified alert types will be sent to the recipient
  regardless of the filter specification.
 
 .PP
-\fIfencing\fP
+\fBfencing\fP
 
 .PP
 These alerts are generated when a node is fenced, whether automatically or
  automatically.
 
 .PP
-\fInode\fP
+\fBnode\fP
 
 .PP
 These alerts when a node is suspended, unsuspended, rebooted, joins the
  cluster, etc.
 
 .PP
-\fIresource\fP
+\fBresource\fP
 
 .PP
 These alerts are generated when a resource is started, stopped, or fails to
@@ -134,46 +134,42 @@ Place alert_syslog.sh in pacemaker lib dirctory (typically /var/lib/pacemaker/)
  chown it the pacemaker user and group (typically hacluster:haclient on a
  default install); chmod it 0750
 
-.EX
-[root@nodea ~]# cp /usr/share/pacemaker/alerts/alert_syslog.sh.sample \\
-  /var/lib/pacemaker/alart_syslog.sh
-[root@nodea ~]# chown hacluster:haclient /var/lib/pacemaker/alert_syslog.sh
-[root@nodea ~]# chmod 0750 /var/lib/pacemaker/alert_syslog.sh
-.EE
+.PP
+~]# \fBcp /usr/share/pacemaker/alerts/alert_syslog.sh.sample\fP \\
+  \fB/var/lib/pacemaker/alart_syslog.sh\fP
+ ~]# \fBchown hacluster:haclient /var/lib/pacemaker/alert_syslog.sh\fP
+ ~]# \fBchmod 0750 /var/lib/pacemaker/alert_syslog.sh\fP
 
 .PP
 Proceed to EXAMPLES section for alert configuration
 
 
 .SH EXAMPLES
-Example which sends all alerts:
-
-.EX
-~] # pcs alert create id=alert_webcluster1 path=/var/lib/pacemaker/alert_syslog.sh
- options RHA_syslog_facility=local2 RHA_syslog_priority=err \\
- RHA_syslog_tag=webcluster1 RHA_alert_server=fqdn.syslog.example.com
-.EE
+Example which sends all alerts to syslog target \fIfqdn.syslog.example.com\fP:
 
 .PP
-Example which sends only fencing and unhandled alerts:
+~] # \fBpcs alert create id=\fP\fIalert_webcluster1\fP \fBpath=/var/lib/pacemaker/alert_syslog.sh\fP
+ options \fBRHA_syslog_facility=\fP\fIlocal2\fP \fBRHA_syslog_priority=\fP\fIerr\fP \\
+ \fBRHA_syslog_tag=\fP\fIwebcluster1\fP \fBRHA_alert_server=\fP\fIfqdn.syslog.example.com\fP
 
-.EX
-~] # pcs alert create id=alert_webcluster1 path=/var/lib/pacemaker/alert_syslog.sh
- options RHA_syslog_facility=local2 RHA_syslog_priority=err \\
- RHA_syslog_tag=webcluster1 RHA_alert_server=fqdn.syslog.example.com \\
- RHA_alert_kind="fencing"
-.EE
+.PP
+Example which sends only fencing and unhandled alerts to \fIfqdn.syslog.example.com\fP:
+
+.PP
+~] # \fBpcs alert create id=\fP\fIalert_webcluster1\fP path=\fB/var/lib/pacemaker/alert_syslog.sh\fP
+ options \fBRHA_syslog_facility=\fP\fIlocal2\fP \fBRHA_syslog_priority=\fP\fIerr\fP \\
+ \fBRHA_syslog_tag=\fP\fIwebcluster1\fP \fBRHA_alert_server=\fP\fIfqdn.syslog.example.com\fP \\
+ \fBRHA_alert_kind=\fP\fI"fencing"\fP
 
 .PP
 This example will send alerts of kind node, resource, and "unhandled"
- alerts, but not fencing notifications:
+ alerts, but not fencing notifications to \fIfqdn.syslog.example.com\fP:
 
-.EX
-~] # pcs alert create id=alert_webcluster1 path=/var/lib/pacemaker/alert_syslog.sh \\
- options RHA_syslog_facility=local2 RHA_syslog_priority=err \\
- RHA_syslog_tag=webcluster1 RHA_alert_server=fqdn.syslog.example.com \\
- RHA_alert_kind="node,resource"
-.EE
+.PP
+~] # \fBpcs alert create id=\fP_alert\fIwebcluster1\fP path=\fB/var/lib/pacemaker/alert_syslog.sh\fP \\
+ options \fBRHA_syslog_facility=\fP\fIlocal2\fP \fBRHA_syslog_priority=\fP\fIerr\fP \\
+ \fBRHA_syslog_tag=\fP\fIwebcluster1\fP \fBRHA_alert_server=\fP\fIfqdn.syslog.example.com\fP \\
+ \fBRHA_alert_kind=\fP\fI"node,resource"\fP
 
 
 .SH HISTORY

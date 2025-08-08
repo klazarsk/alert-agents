@@ -7,10 +7,11 @@
 
 # SYNOPSIS
 
- pcs alert create id=alert_cluster  \
- path=**/var/lib/pacemaker/alert_syslog.sh**  options \
- **RHA_syslog_facility**=local2 **RHA_syslog_priority**=err \
- **RHA_syslog_tag**=SERVICEGROUP **RHA_alert_server**=syslog.example.com
+ **pcs alert create id=alert_cluster**  \
+ path=**/var/lib/pacemaker/alert_syslog.sh**  **options** \
+ [**RHA\_syslog\_facility=**_local2_] [**RHA\_syslog\_priority=**_err_] \
+ [**RHA\_syslog\_tag=**_SERVICEGROUP_] [**RHA\_alert\_server=**_syslog.example.com_]
+
 
 # DESCRIPTION
 
@@ -23,7 +24,7 @@
 
 # OPTIONS
 
-**path=**_/var/lib/pacemaker/alert_syslog.sh_
+**path=**_/var/lib/pacemaker/alert\_syslog.sh_
 
  This is the path to the alert agent on the nodes' filesystems - the path 
  should match to wherever you've installed the file. By default they're placed
@@ -31,22 +32,22 @@
  manually placed in /var/lib/pacemaker/ for runtime when the agents are 
  configured.
 
-**RHA_syslog_facility=**_facility_
+**RHA\_syslog\_facility=**_facility_
 
 This is in relation to the the syslog alert facility (man 3 syslog)
 
- Syslog _facility_ Examples:
+ Syslog facility Examples:
 
   LOG_AUTH, AUTHPRIV, LOG_LOCAL0, local5, etc.
   LOCAL0 - LOCAL7 are for custom use, for alerting mechanisms such as 
   this script
 
-**RHA_syslog_priority=**_RHA_syslog_priority_
+**RHA\_syslog\_priority=**_RHA\_syslog\_priority_
 
 This is in relation to the syslog priority level (man 3 syslog)
 
- Syslog _priority_ examples:
- LOG_EMERG, LOG_ALERT, LOG_CRIT, ERR, WARNING, NOTICE, INFO, DEBUG
+ Syslog priority examples:
+ LOG\_EMERG, LOG\_ALERT, LOG\_CRIT, ERR, WARNING, NOTICE, INFO, DEBUG
 
 (there are more facilities and levels than included above)
    
@@ -60,90 +61,82 @@ local2.*    /var/log/pacemaker/syslog # Capture ALL notices sent to LOG_LOCAL2
 local2.err  /var/log/pacemaker/errorlog # capture all notices of ERR or 
  greater priority to /var/log/paceemaker/errorlog
    
-**RHA_syslog_tag=**_tag_
+**RHA\_syslog\_tag=**_tag_
 
-This is in relation to the syslog _tag_ level (_man 5 rsyslog.conf, man 1 logger_)
+This is in relation to the syslog tag level (man 5 rsyslog.conf, man 1 logger)
 
 This is the syslog "tag" attribute which is supported by many aggreggators, 
  useful for additional filtering
          
-**RHA_syslog_port=**_port_
+**RHA\_syslog\_port=**_port_
 
 This is the port the syslog aggregator is listening on if it's anything other
- than the standard syslog port of _514_
+ than the standard syslog port of 514
                   
          
-**RHA_syslog_proto=**_protocol_
+**RHA\_syslog\_proto=**_protocol_
 
 This is the protocol syslog is listening for; valid values are _tcp_ or _udp_ 
          
-**RHA_alert_kind=**_"fencing,node,resource"_
+**RHA\_alert\_kind=**_"fencing,node,resource"_
 
-This option sets the RHA_alert_kind variable in the alert_syslog alert
+This option sets the RHA\_alert\_kind variable in the alert\_syslog.sh alert
  agent, to specify the criteria on which alerts to allow to send to the email
  recipient.
 
 Note that otherwise-unspecified alert types will be sent to the recipient 
  regardless of the filter specification.
 
-_fencing_
+**fencing**
 
 These alerts are generated when a node is fenced, whether automatically or 
  automatically.
 
-_node_
+**node**
 
 These alerts when a node is suspended, unsuspended, rebooted, joins the 
  cluster, etc. 
     
-_resource_
+**resource**
     
 These alerts are generated when a resource is started, stopped, or fails to
  start. 
 
 # INSTALLATION
 
-Place alert_syslog.sh in pacemaker lib dirctory (typically /var/lib/pacemaker/)
+Place alert\_syslog.sh in pacemaker lib dirctory (typically /var/lib/pacemaker/)
  chown it the pacemaker user and group (typically hacluster:haclient on a 
  default install); chmod it 0750
 
-```
-[root@nodea ~]# cp /usr/share/pacemaker/alerts/alert_syslog.sh.sample \
-  /var/lib/pacemaker/alart_syslog.sh
-[root@nodea ~]# chown hacluster:haclient /var/lib/pacemaker/alert_syslog.sh
-[root@nodea ~]# chmod 0750 /var/lib/pacemaker/alert_syslog.sh
-```
+ ~]# **cp /usr/share/pacemaker/alerts/alert\_syslog.sh.sample** \
+  **/var/lib/pacemaker/alart\_syslog.sh**
+ ~]# **chown hacluster:haclient /var/lib/pacemaker/alert\_syslog.sh**
+ ~]# **chmod 0750 /var/lib/pacemaker/alert\_syslog.sh**
 
 Proceed to EXAMPLES section for alert configuration
 
 # EXAMPLES
 
-Example which sends all alerts:
+Example which sends all alerts to syslog target _fqdn.syslog.example.com_:
 
-```
-~] # pcs alert create id=alert_webcluster1 path=/var/lib/pacemaker/alert_syslog.sh
- options RHA_syslog_facility=local2 RHA_syslog_priority=err \
- RHA_syslog_tag=webcluster1 RHA_alert_server=fqdn.syslog.example.com
-```
+~] # **pcs alert create id=**_alert\_webcluster1_ **path=/var/lib/pacemaker/alert_syslog.sh**
+ options **RHA\_syslog\_facility=**_local2_ **RHA\_syslog\_priority=**_err_ \
+ **RHA\_syslog\_tag=**_webcluster1_ **RHA\_alert\_server=**_fqdn.syslog.example.com_
 
-Example which sends only fencing and unhandled alerts:
+Example which sends only fencing and unhandled alerts to _fqdn.syslog.example.com_:
 
-```
-~] # pcs alert create id=alert_webcluster1 path=/var/lib/pacemaker/alert_syslog.sh
- options RHA_syslog_facility=local2 RHA_syslog_priority=err \
- RHA_syslog_tag=webcluster1 RHA_alert_server=fqdn.syslog.example.com \
- RHA_alert_kind="fencing"
-```
+~] # **pcs alert create id=**_alert\_webcluster1_ path=**/var/lib/pacemaker/alert\_syslog.sh**
+ options **RHA\_syslog\_facility=**_local2_ **RHA\_syslog\_priority=**_err_ \
+ **RHA\_syslog\_tag=**_webcluster1_ **RHA\_alert\_server=**_fqdn.syslog.example.com_ \
+ **RHA\_alert\_kind=**_"fencing"_
 
 This example will send alerts of kind node, resource, and "unhandled"
- alerts, but not fencing notifications:
+ alerts, but not fencing notifications to _fqdn.syslog.example.com_:
  
-```
-~] # pcs alert create id=alert_webcluster1 path=/var/lib/pacemaker/alert_syslog.sh \
- options RHA_syslog_facility=local2 RHA_syslog_priority=err \
- RHA_syslog_tag=webcluster1 RHA_alert_server=fqdn.syslog.example.com \
- RHA_alert_kind="node,resource"
-```
+~] # **pcs alert create id=**_alert_webcluster1_ path=**/var/lib/pacemaker/alert_syslog.sh** \
+ options **RHA\_syslog\_facility=**_local2_ **RHA\_syslog\_priority=**_err_ \
+ **RHA\_syslog\_tag=**_webcluster1_ **RHA\_alert\_server=**_fqdn.syslog.example.com_ \
+ **RHA\_alert\_kind=**_"node,resource"_
 
 
 # HISTORY
