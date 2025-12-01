@@ -62,15 +62,15 @@ These alerts are generated when a resource is started, stopped, or fails to
     
 # INSTALLATION
 
-Place alert_syslog.sh in pacemaker lib dirctory (typically /var/lib/pacemaker)
+Place alert_smtp.sh in pacemaker lib dirctory (typically /var/lib/pacemaker)
  chown it the pacemaker user and group (typically hacluster:haclient on a 
  default install); chmod it 0750
 
 
  ~]# **cp /usr/share/pacemaker/alerts/alert\_smtp.sh.sample \
   /var/lib/pacemaker/alert\_smtp.sh**
- ~]# chown hacluster:haclient /var/lib/pacemaker/alert\_smtp.sh
- ~]# chmod 0750 /var/lib/pacemaker/alert\_smtp.sh
+ ~]# chown hacluster:haclient **/var/lib/pacemaker/alert\_smtp.sh**
+ ~]# chmod 0750 **/var/lib/pacemaker/alert\_smtp.sh**
 
  
 Proceed to EXAMPLES section for alert configuration
@@ -98,7 +98,7 @@ This example will send alerts of kind node, resource, and "unhandled"
  ~]# **pcs alert create id=**_filtered-smtp_ \
  **path=/var/lib/pacemaker/alert\_smtp.sh options** \
  **email\_sender=**_noreply@example.com_ **RHA\_alert\_kind=**_"node,resource"_
- ~]# **pcs alert recipient add **_filtered-smtp_ \
+ ~]# **pcs alert recipient add** _filtered-smtp_ \
 **value=**_monitor@example.com  
  ~]# 
 

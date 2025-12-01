@@ -72,15 +72,15 @@ These alerts are generated when a resource is started, stopped, or fails to
 
 
 .SH INSTALLATION
-Place alert_syslog.sh in pacemaker lib dirctory (typically /var/lib/pacemaker)
+Place alert_smtp.sh in pacemaker lib dirctory (typically /var/lib/pacemaker)
  chown it the pacemaker user and group (typically hacluster:haclient on a
  default install); chmod it 0750
 
 .PP
 ~]# \fBcp /usr/share/pacemaker/alerts/alert_smtp.sh.sample \\
   /var/lib/pacemaker/alert_smtp.sh\fP
- ~]# chown hacluster:haclient /var/lib/pacemaker/alert_smtp.sh
- ~]# chmod 0750 /var/lib/pacemaker/alert_smtp.sh
+ ~]# chown hacluster:haclient \fB/var/lib/pacemaker/alert_smtp.sh\fP
+ ~]# chmod 0750 \fB/var/lib/pacemaker/alert_smtp.sh\fP
 
 .PP
 Proceed to EXAMPLES section for alert configuration
@@ -109,7 +109,7 @@ This example will send alerts of kind node, resource, and "unhandled"
 ~]# \fBpcs alert create id=\fP\fIfiltered-smtp\fP \\
  \fBpath=/var/lib/pacemaker/alert_smtp.sh options\fP \\
  \fBemail_sender=\fP\fInoreply@example.com\fP \fBRHA_alert_kind=\fP\fI"node,resource"\fP
- ~]# **pcs alert recipient add **\fIfiltered-smtp\fP \\
+ ~]# \fBpcs alert recipient add\fP \fIfiltered-smtp\fP \\
 \fBvalue=\fP_monitor@example.com
 .br
  ~]#
